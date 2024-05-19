@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click the Characters Game</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+
+        .game-container {
+            text-align: center;
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .character {
+            width: 100px;
+            height: 100px;
+            background-image: url('characters.png');
+            background-size: cover;
+            position: absolute;
+            cursor: pointer;
+        }
+
+        #score {
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Click the Characters!</h1>
+        <p>Score: <span id="score">0</span></p>
+        <div class="character" id="character"></div>
+    </div>
+    <script>
+        let score = 0;
+
+        function moveCharacter() {
+            const character = document.getElementById('character');
+            const gameContainer = document.querySelector('.game-container');
+            const containerWidth = gameContainer.offsetWidth;
+            const containerHeight = gameContainer.offsetHeight;
+
+            const x = Math.random() * (containerWidth - 100);
+            const y = Math.random() * (containerHeight - 100);
+
+            character.style.left = `${x}px`;
+            character.style.top = `${y}px`;
+        }
+
+        document.getElementById('character').addEventListener('click', () => {
+            score++;
+            document.getElementById('score').textContent = score;
+            moveCharacter();
+        });
+
+        moveCharacter();
+    </script>
+</body>
+</html>
