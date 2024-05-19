@@ -32,6 +32,7 @@
             position: absolute;
             bottom: 0;
             left: 50px;
+            cursor: pointer;
         }
 
         .obstacle {
@@ -66,12 +67,12 @@
         let speed = 5;
 
         const obstacles = [
-            'https://giphy.com/gifs/SuperSimpleTV-Td9oNc8cI0VrG',
-            'https://giphy.com/gifs/chicken-egg-gold-lu8JKuK5oZJlu',
-            'https://giphy.com/gifs/pig-cute-3o6ZtmJ98CI6fbpTDi',
-            'https://giphy.com/gifs/sheep-cute-animated-26AHOnEvXb0nWwhQI',
-            'https://giphy.com/gifs/horse-run-animal-gif-YZW05dWBjDMy8',
-            'https://giphy.com/gifs/goat-cute-3o6Zt5Qe17MFy8A3hO'
+            'https://media.giphy.com/media/Td9oNc8cI0VrG/giphy.gif',
+            'https://media.giphy.com/media/lu8JKuK5oZJlu/giphy.gif',
+            'https://media.giphy.com/media/3o6ZtmJ98CI6fbpTDi/giphy.gif',
+            'https://media.giphy.com/media/26AHOnEvXb0nWwhQI/giphy.gif',
+            'https://media.giphy.com/media/YZW05dWBjDMy8/giphy.gif',
+            'https://media.giphy.com/media/3o6Zt5Qe17MFy8A3hO/giphy.gif'
         ];
 
         function jump() {
@@ -130,6 +131,8 @@
                 jump();
             }
         });
+
+        character.addEventListener('click', jump);
 
         createObstacle();
     </script>
