@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Click the Characters Game</title>
+    <title>Endless Runner Game</title>
     <style>
         body {
             display: flex;
@@ -15,22 +15,37 @@
         }
 
         .game-container {
-            text-align: center;
             position: relative;
-            width: 100%;
-            height: 100%;
+            width: 800px;
+            height: 400px;
+            overflow: hidden;
+            border: 2px solid #000;
+            background-color: #fff;
         }
 
         .character {
             width: 100px;
             height: 100px;
-            background-image: url('characters.png');
+            background-image: url('characters_transparent.png');
             background-size: cover;
             position: absolute;
-            cursor: pointer;
+            bottom: 0;
+            left: 50px;
+        }
+
+        .obstacle {
+            width: 50px;
+            height: 50px;
+            background-color: red;
+            position: absolute;
+            bottom: 0;
+            right: -50px;
         }
 
         #score {
+            position: absolute;
+            top: 10px;
+            left: 10px;
             font-size: 24px;
             font-weight: bold;
         }
@@ -38,33 +53,72 @@
 </head>
 <body>
     <div class="game-container">
-        <h1>Click the Characters!</h1>
-        <p>Score: <span id="score">0</span></p>
+        <div id="score">Score: 0</div>
         <div class="character" id="character"></div>
     </div>
     <script>
+        const character = document.getElementById('character');
+        const gameContainer = document.querySelector('.game-container');
+        const scoreElement = document.getElementById('score');
+        let isJumping = false;
         let score = 0;
 
-        function moveCharacter() {
-            const character = document.getElementById('character');
-            const gameContainer = document.querySelector('.game-container');
-            const containerWidth = gameContainer.offsetWidth;
-            const containerHeight = gameContainer.offsetHeight;
-
-            const x = Math.random() * (containerWidth - 100);
-            const y = Math.random() * (containerHeight - 100);
-
-            character.style.left = `${x}px`;
-            character.style.top = `${y}px`;
+        function jump() {
+            if (isJumping) return;
+            isJumping = true;
+            let jumpHeight = 0;
+            const jumpInterval = setInterval(() => {
+                if (jumpHeight >= 150) {
+                    clearInterval(jumpInterval);
+                    const fallInterval = setInterval(() => {
+                        if (jumpHeight <= 0) {
+                            clearInterval(fallInterval);
+                            isJumping = false;
+                        } else {
+                            jumpHeight -= 5;
+                            character.style.bottom = `${jumpHeight}px`;
+                        }
+                    }, 20);
+                } else {
+                    jumpHeight += 5;
+                    character.style.bottom = `${jumpHeight}px`;
+                }
+            }, 20);
         }
 
-        document.getElementById('character').addEventListener('click', () => {
-            score++;
-            document.getElementById('score').textContent = score;
-            moveCharacter();
+        function createObstacle() {
+            const obstacle = document.createElement('div');
+            obstacle.classList.add('obstacle');
+            gameContainer.appendChild(obstacle);
+
+            let obstaclePosition = 800;
+            const moveObstacle = setInterval(() => {
+                if (obstaclePosition <= -50) {
+                    clearInterval(moveObstacle);
+                    gameContainer.removeChild(obstacle);
+                    score++;
+                    scoreElement.textContent = `Score: ${score}`;
+                } else if (obstaclePosition > 0 && obstaclePosition < 150 && character.style.bottom === '0px') {
+                    clearInterval(moveObstacle);
+                    alert('Game Over! Your score is ' + score);
+                    window.location.reload();
+                } else {
+                    obstaclePosition -= 5;
+                    obstacle.style.right = `${obstaclePosition}px`;
+                }
+            }, 20);
+
+            setTimeout(createObstacle, Math.random() * 2000 + 1000);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                jump();
+            }
         });
 
-        moveCharacter();
+        createObstacle();
     </script>
 </body>
 </html>
+
